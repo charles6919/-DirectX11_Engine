@@ -10,7 +10,7 @@ int APIENTRY wWinMain( _In_ HINSTANCE hInstance,
 	rw.Initialize(hInstance, "Title", "MyWindowClass", 800, 600);
 	while (rw.ProcessMessages() == true)
 	{
-		int a = 10;
+
 	}
 	return 0;
 }
