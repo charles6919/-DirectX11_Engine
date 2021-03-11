@@ -3,9 +3,7 @@
 class WindowContainer
 {
 public:
-	//WindowProc
-	//Mouse
-	//Keyboard
+	LRESULT WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 protected:
 	RenderWindow render_window;

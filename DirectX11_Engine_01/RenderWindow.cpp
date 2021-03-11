@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "WindowContainer.h"
 
-bool RenderWindow::Initialize(HINSTANCE hInstance, string window_title, string window_class, int width, int height)
+bool RenderWindow::Initialize(WindowContainer* pWindowContainer, HINSTANCE hInstance, string window_title, string window_class, int width, int height)
 {
 	this->hInstance = hInstance;
 	this->width = width;
@@ -25,7 +25,7 @@ bool RenderWindow::Initialize(HINSTANCE hInstance, string window_title, string w
 		NULL,
 		NULL,
 		this->hInstance,
-		nullptr);
+		pWindowContainer);
 
 	if (this->handle == NULL)
 	{
@@ -76,16 +76,53 @@ RenderWindow::~RenderWindow()
 	}
 }
 
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK HandleMsgRedirect(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	return DefWindowProc(hwnd, uMsg, wParam, lParam);
+	switch(uMsg)
+	{
+		case WM_CLOSE:
+		{
+			DestroyWindow(hwnd);
+			return 0;
+		}
+		default:
+		{
+			WindowContainer* const pWindow = reinterpret_cast<WindowContainer*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+			return pWindow->WindowProc(hwnd, uMsg, wParam, lParam);
+		}	
+	}
+}
+
+LRESULT CALLBACK HandleMessageSetup(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	switch (uMsg)
+	{
+		case WM_NCCREATE:
+		{
+			const CREATESTRUCTW* const pCreate = reinterpret_cast<CREATESTRUCTW*>(lParam);
+			WindowContainer* pWindow = reinterpret_cast<WindowContainer*>(pCreate->lpCreateParams);
+			if (pWindow == nullptr)
+			{
+				ErrorLogger::Log("Critical Error: Pointer to window container is null during WM_NCCREATE.");
+				exit(-1);
+			}
+			SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pWindow));
+			SetWindowLongPtr(hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(HandleMsgRedirect));
+			return pWindow->WindowProc(hwnd, uMsg, wParam, lParam);
+			//return DefWindowProc(hwnd, uMsg, wParam, lParam);
+		}	
+		default:
+		{
+			return DefWindowProc(hwnd, uMsg, wParam, lParam);
+		}
+	}
 }
 
 void RenderWindow::RegisterWindowClass()
 {
 	WNDCLASSEX wc;
 	wc.style			= CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-	wc.lpfnWndProc		= WindowProc;
+	wc.lpfnWndProc		= HandleMessageSetup;
 	wc.cbClsExtra		= 0;
 	wc.cbWndExtra		= 0;
 	wc.hInstance		= this->hInstance;
