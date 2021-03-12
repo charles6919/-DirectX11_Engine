@@ -154,6 +154,8 @@
     <ClCompile Include="RenderWindow.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="StringConverter.cpp" />
+    <ClCompile Include="Systems\Keyboard\Keyboard.cpp" />
+    <ClCompile Include="Systems\Keyboard\KeyboardEvent.cpp" />
     <ClCompile Include="WindowContainer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +164,8 @@
     <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StringConverter.h" />
+    <ClInclude Include="Systems\Keyboard\Keyboard.h" />
+    <ClInclude Include="Systems\Keyboard\KeyboardEvent.h" />
     <ClInclude Include="WindowContainer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
