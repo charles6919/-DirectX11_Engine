@@ -156,6 +156,8 @@
     <ClCompile Include="StringConverter.cpp" />
     <ClCompile Include="Systems\Keyboard\Keyboard.cpp" />
     <ClCompile Include="Systems\Keyboard\KeyboardEvent.cpp" />
+    <ClCompile Include="Systems\Mouse\Mouse.cpp" />
+    <ClCompile Include="Systems\Mouse\MouseEvent.cpp" />
     <ClCompile Include="WindowContainer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -166,6 +168,8 @@
     <ClInclude Include="StringConverter.h" />
     <ClInclude Include="Systems\Keyboard\Keyboard.h" />
     <ClInclude Include="Systems\Keyboard\KeyboardEvent.h" />
+    <ClInclude Include="Systems\Mouse\Mouse.h" />
+    <ClInclude Include="Systems\Mouse\MouseEvent.h" />
     <ClInclude Include="WindowContainer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

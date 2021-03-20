@@ -19,6 +19,9 @@
     <Filter Include="System\Keyboard">
       <UniqueIdentifier>{4b7f70fb-8d7a-4615-86f7-e93acaf87406}</UniqueIdentifier>
     </Filter>
+    <Filter Include="System\Mouse">
+      <UniqueIdentifier>{50352bf0-533a-4abe-9016-83e8a29e64fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -45,8 +48,14 @@
     <ClCompile Include="Systems\Keyboard\KeyboardEvent.cpp">
       <Filter>System\Keyboard</Filter>
     </ClCompile>
+    <ClCompile Include="Systems\Mouse\Mouse.cpp">
+      <Filter>System\Mouse</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Mouse\MouseEvent.cpp">
+      <Filter>System\Mouse</Filter>
+    </ClCompile>
     <ClCompile Include="Systems\Keyboard\Keyboard.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>System\Keyboard</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -71,8 +80,14 @@
     <ClInclude Include="Systems\Keyboard\KeyboardEvent.h">
       <Filter>System\Keyboard</Filter>
     </ClInclude>
+    <ClInclude Include="Systems\Mouse\Mouse.h">
+      <Filter>System\Mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Mouse\MouseEvent.h">
+      <Filter>System\Mouse</Filter>
+    </ClInclude>
     <ClInclude Include="Systems\Keyboard\Keyboard.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>System\Keyboard</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
