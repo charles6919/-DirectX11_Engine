@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include <comdef.h>
 #include <string>
+#include <memory>
 
 //Libs
 #pragma comment(lib, "d3d11.lib")

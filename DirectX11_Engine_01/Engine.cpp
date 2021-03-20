@@ -51,14 +51,23 @@ void Engine::Update()
 		outMsg += "\n";
 		OutputDebugStringA(outMsg.c_str());*/
 
-		if (me.GetType() == MouseEvent::EventType::WheelDown)
+		/*if (me.GetType() == MouseEvent::EventType::WheelDown)
 		{
 			OutputDebugStringA("MouseWheelDown\n");
 		}
 		else if (me.GetType() == MouseEvent::EventType::WheelUp)
 		{
 			OutputDebugStringA("MouseWheelUp\n");
-		}
+		}*/
 
+		if (me.GetType() == MouseEvent::EventType::RAW_MOVE)
+		{
+			string outMsg = "X: ";
+			outMsg += to_string(me.GetPosX());
+			outMsg += ", Y: ";
+			outMsg += to_string(me.GetPosY());
+			outMsg += "\n";
+			OutputDebugStringA(outMsg.c_str());
+		}
 	}
 }
