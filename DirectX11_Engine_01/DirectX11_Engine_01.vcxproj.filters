@@ -22,6 +22,9 @@
     <Filter Include="System\Mouse">
       <UniqueIdentifier>{50352bf0-533a-4abe-9016-83e8a29e64fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="System\Graphics">
+      <UniqueIdentifier>{d2dac79e-81cb-4468-b5bc-f06127f32822}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -57,6 +60,12 @@
     <ClCompile Include="Systems\Keyboard\Keyboard.cpp">
       <Filter>System\Keyboard</Filter>
     </ClCompile>
+    <ClCompile Include="Systems\Graphics\Graphics.cpp">
+      <Filter>System\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Graphics\AdapterReader.cpp">
+      <Filter>System\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StringConverter.h">
@@ -88,6 +97,12 @@
     </ClInclude>
     <ClInclude Include="Systems\Keyboard\Keyboard.h">
       <Filter>System\Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Graphics\Graphics.h">
+      <Filter>System\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Graphics\AdapterReader.h">
+      <Filter>System\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

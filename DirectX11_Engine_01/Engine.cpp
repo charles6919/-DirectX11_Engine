@@ -3,8 +3,12 @@
 
 bool Engine::Initialize(HINSTANCE hInstance, string window_title, string window_class, int width, int height)
 {
-	keyboard.EnableAutoRepeatChars();
-	return this->render_window.Initialize(this, hInstance, window_title, window_class, width, height);
+	if (!this->render_window.Initialize(this, hInstance, window_title, window_class, width, height)) 
+	{
+		return false;
+	}
+
+	if (!gfx.Initialize(this->render_window.GetHWND(), width, height));
 }
 
 bool Engine::ProcessMessages()

@@ -2,6 +2,7 @@
 #include "RenderWindow.h"
 #include "Systems/Keyboard/Keyboard.h"
 #include "Systems/Mouse/Mouse.h"
+#include "Systems/Graphics/Graphics.h"
 
 class WindowContainer
 {
@@ -13,6 +14,7 @@ protected:
 	RenderWindow render_window;
 	Keyboard keyboard;
 	Mouse mouse;
+	Graphics gfx;
 private:
 
 };
