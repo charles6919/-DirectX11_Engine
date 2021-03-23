@@ -8,7 +8,10 @@ bool Engine::Initialize(HINSTANCE hInstance, string window_title, string window_
 		return false;
 	}
 
-	if (!gfx.Initialize(this->render_window.GetHWND(), width, height));
+	if (!gfx.Initialize(this->render_window.GetHWND(), width, height))
+	{
+		return false;
+	}
 }
 
 bool Engine::ProcessMessages()
@@ -74,4 +77,9 @@ void Engine::Update()
 			OutputDebugStringA(outMsg.c_str());
 		}
 	}
+}
+
+void Engine::Render()
+{
+	gfx.RenderFrame();
 }

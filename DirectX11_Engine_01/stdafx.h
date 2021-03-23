@@ -11,6 +11,7 @@
 
 //D3D Header
 #include <d3d11.h>
+#include <DirectXMath.h>
 
 //Libs
 #pragma comment(lib, "d3d11.lib")
