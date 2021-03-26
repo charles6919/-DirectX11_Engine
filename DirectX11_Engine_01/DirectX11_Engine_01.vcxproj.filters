@@ -69,6 +69,9 @@
     <ClCompile Include="Systems\Graphics\Vertex.cpp">
       <Filter>System\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Systems\Graphics\Shaders.cpp">
+      <Filter>System\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StringConverter.h">
@@ -110,5 +113,13 @@
     <ClInclude Include="Systems\Graphics\Vertex.h">
       <Filter>System\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Systems\Graphics\Shaders.h">
+      <Filter>System\Graphics</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="VertexShader.hlsl">
+      <Filter>리소스 파일</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

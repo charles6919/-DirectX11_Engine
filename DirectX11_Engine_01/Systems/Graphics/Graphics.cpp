@@ -89,16 +89,37 @@ bool Graphics::InitializeDirectX(HWND hwnd, int width, int height)
 
 bool Graphics::InitializeShaders()
 {
+	wstring shaderFolderPath = L"";
+#pragma region 셰이더 경로 결정부분
+	if (IsDebuggerPresent() == TRUE)
+	{
+#ifdef _DEBUG //Debug Mode
+	#ifdef _WIN64 //x64
+		shaderFolderPath = L"../x64/Debug/";
+	#else //x86
+		shaderFolderPath = L"../Debug/";
+	#endif
+#else //Relesase Mode
+	#ifdef //x64
+		shaderFolderPath = L"../x64/Release/";
+	#else//x86
+		shaderFolderPath = L"../Release/";
+	#endif
+#endif // DEBUG
+	}
+#pragma endregion 셰이더 경로 결정부분
+
+	HRESULT hr;
+
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{"POSITION", 0, DXGI_FORMAT::DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_CLASSIFICATION::D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
 
-	HRESULT hr;
 	UINT numElements = ARRAYSIZE(layout);
-	{
-		hr = this->device->CreateInputLayout(layout, numElements, vertex_shader_buffer->GetBufferPointer(), vertex_shader_buffer->GetBufferSize(), this->inputLayout.GetAddressOf());
-		assert(SUCCEEDED(hr));
-	}
-	return false;
+	
+	if (!vertexShader.Initialize(this->device, shaderFolderPath + L"vertexShader.cso", layout, numElements))
+		return false;
+	
+	return true;
 }
