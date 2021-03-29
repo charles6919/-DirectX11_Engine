@@ -1,6 +1,9 @@
-﻿  Graphics.cpp
-D:\DirectX_11_Engine\-DirectX11_Engine\DirectX11_Engine_01\Systems\Graphics\Graphics.cpp(112,10): warning C4101: 'hr' :참조되지 않은 지역 변수입니다.
-  Shaders.cpp
+﻿  compilation object save succeeded; see D:\DirectX_11_Engine\-DirectX11_Engine\Debug\VertexShader.cso
+  Engine.cpp
+  Main.cpp
+  RenderWindow.cpp
+  Graphics.cpp
+  Vertex.cpp
   WindowContainer.cpp
   코드를 생성하고 있습니다...
   DirectX11_Engine_01.vcxproj -> D:\DirectX_11_Engine\-DirectX11_Engine\Debug\DirectX11_Engine_01.exe

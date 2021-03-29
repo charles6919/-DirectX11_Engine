@@ -12,6 +12,8 @@ bool Engine::Initialize(HINSTANCE hInstance, string window_title, string window_
 	{
 		return false;
 	}
+
+	return true;
 }
 
 bool Engine::ProcessMessages()

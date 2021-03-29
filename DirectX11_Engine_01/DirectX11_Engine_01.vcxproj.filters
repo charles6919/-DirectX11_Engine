@@ -118,7 +118,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="VertexShader.hlsl">
+    <FxCompile Include="Shaders\VertexShader.hlsl">
+      <Filter>리소스 파일</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\PixelShader.hlsl">
       <Filter>리소스 파일</Filter>
     </FxCompile>
   </ItemGroup>
