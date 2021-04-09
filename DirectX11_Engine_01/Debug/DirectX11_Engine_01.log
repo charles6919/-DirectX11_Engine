@@ -1,9 +1,3 @@
-﻿  compilation object save succeeded; see D:\DirectX_11_Engine\-DirectX11_Engine\Debug\VertexShader.cso
-  Engine.cpp
-  Main.cpp
-  RenderWindow.cpp
-  Graphics.cpp
-  Vertex.cpp
-  WindowContainer.cpp
-  코드를 생성하고 있습니다...
+﻿  compilation object save succeeded; see D:\DirectX_11_Engine\-DirectX11_Engine\Debug\PixelShader.cso
+  compilation object save succeeded; see D:\DirectX_11_Engine\-DirectX11_Engine\Debug\VertexShader.cso
   DirectX11_Engine_01.vcxproj -> D:\DirectX_11_Engine\-DirectX11_Engine\Debug\DirectX11_Engine_01.exe
