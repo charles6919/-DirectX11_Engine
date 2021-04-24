@@ -3,7 +3,10 @@
 
 bool Graphics::Initialize(HWND hwnd, int width, int height)
 {
-	if (!InitializeDirectX(hwnd, width, height))
+	this->windowWidth = width;
+	this->windowHeight = height;
+
+	if (!InitializeDirectX(hwnd))
 		return false;
 
 	if (!InitializeShaders())
@@ -19,8 +22,8 @@ void Graphics::RenderFrame()
 {
 	float bgColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	this->deviceContext->ClearRenderTargetView(this->renderTargetView.Get(), bgColor);
-	this->deviceContext->ClearDepthStencilView(	this->depthStencilView.Get(),
-												D3D11_CLEAR_FLAG::D3D11_CLEAR_DEPTH | D3D11_CLEAR_FLAG::D3D11_CLEAR_STENCIL, 1.0f, 0);
+	this->deviceContext->ClearDepthStencilView(this->depthStencilView.Get(),
+		D3D11_CLEAR_FLAG::D3D11_CLEAR_DEPTH | D3D11_CLEAR_FLAG::D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	this->deviceContext->IASetInputLayout(this->vertexShader.GetInputLayout());
 	this->deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -29,14 +32,26 @@ void Graphics::RenderFrame()
 	this->deviceContext->PSSetSamplers(0, 1, this->samplerState.GetAddressOf());
 	this->deviceContext->VSSetShader(vertexShader.GetShader(), NULL, 0);
 	this->deviceContext->PSSetShader(pixelShader.GetShader(), NULL, 0);
-
+	 
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 
+	//Update Constant Buffer
+	DirectX::XMMATRIX world = DirectX::XMMatrixIdentity();
+	camera.AdjustPosition(0.0f, 0.01f, 0.0f);
+
+	constantBuffer.data.mat = world * camera.GetViewMatrix() * camera.GetProjectionMatrix();
+	constantBuffer.data.mat = DirectX::XMMatrixTranspose(constantBuffer.data.mat); //hlsl의 행렬의 행열이 반대기때문에 재배열 해줘야 한다.
+
+	if (!constantBuffer.ApplyChanges())
+		return;
+	this->deviceContext->VSSetConstantBuffers(0, 1, constantBuffer.GetAddressOf());
+
 	//Draw Square
 	this->deviceContext->PSSetShaderResources(0, 1, this->myTexture.GetAddressOf());
-	this->deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
-	this->deviceContext->Draw(6, 0);
+	this->deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), vertexBuffer.StridePtr(), &offset);
+	this->deviceContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT::DXGI_FORMAT_R32_UINT, 0);
+	this->deviceContext->DrawIndexed(indexBuffer.BufferSize(), 0, 0);
 
 	//Drw Text
 	spriteBatch->Begin();
@@ -46,7 +61,7 @@ void Graphics::RenderFrame()
 	this->swapchain->Present(1, NULL);
 }
 
-bool Graphics::InitializeDirectX(HWND hwnd, int width, int height)
+bool Graphics::InitializeDirectX(HWND hwnd)
 {
 	vector<AdapterData> adapters = AdapterReader::GetAdapters();
 
@@ -63,8 +78,8 @@ bool Graphics::InitializeDirectX(HWND hwnd, int width, int height)
 		DXGI_SWAP_CHAIN_DESC desc;
 		ZeroMemory(&desc, sizeof(DXGI_SWAP_CHAIN_DESC));
 
-		desc.BufferDesc.Width = width;
-		desc.BufferDesc.Height = height;
+		desc.BufferDesc.Width = this->windowWidth;
+		desc.BufferDesc.Height = this->windowHeight;
 		desc.BufferDesc.RefreshRate.Numerator = 60;
 		desc.BufferDesc.RefreshRate.Denominator = 1;
 		desc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -80,20 +95,20 @@ bool Graphics::InitializeDirectX(HWND hwnd, int width, int height)
 		desc.Windowed = true;
 		desc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 		desc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-		
 
-		hr = D3D11CreateDeviceAndSwapChain(	adapters[0].pAdapter,
-													D3D_DRIVER_TYPE_UNKNOWN,
-													NULL,
-													NULL,
-													NULL,
-													0,
-													D3D11_SDK_VERSION,
-													&desc,
-													this->swapchain.GetAddressOf(),
-													this->device.GetAddressOf(),
-													NULL,
-													this->deviceContext.GetAddressOf());
+
+		hr = D3D11CreateDeviceAndSwapChain(adapters[0].pAdapter,
+			D3D_DRIVER_TYPE_UNKNOWN,
+			NULL,
+			NULL,
+			NULL,
+			0,
+			D3D11_SDK_VERSION,
+			&desc,
+			this->swapchain.GetAddressOf(),
+			this->device.GetAddressOf(),
+			NULL,
+			this->deviceContext.GetAddressOf());
 
 		assert(SUCCEEDED(hr));
 	}
@@ -113,8 +128,8 @@ bool Graphics::InitializeDirectX(HWND hwnd, int width, int height)
 	//Descibe Depth/Stencil buffer
 	{
 		D3D11_TEXTURE2D_DESC desc;
-		desc.Width = width;
-		desc.Height = height;
+		desc.Width = this->windowWidth;
+		desc.Height = this->windowHeight;
 		desc.MipLevels = 1;
 		desc.ArraySize = 1;
 		desc.Format = DXGI_FORMAT::DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -165,8 +180,8 @@ bool Graphics::InitializeDirectX(HWND hwnd, int width, int height)
 
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
-	viewport.Width = (FLOAT)width;
-	viewport.Height = (FLOAT)height;
+	viewport.Width = (FLOAT)this->windowWidth;
+	viewport.Height = (FLOAT)this->windowHeight;
 	viewport.MaxDepth = 1.0f;
 
 
@@ -200,10 +215,10 @@ bool Graphics::InitializeDirectX(HWND hwnd, int width, int height)
 		desc.AddressU = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
 		desc.AddressV = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
 		desc.AddressW = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
-		desc.ComparisonFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_NEVER; 
+		desc.ComparisonFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_NEVER;
 		desc.MinLOD = 0;
 		desc.MaxLOD = D3D11_FLOAT32_MAX;
-		
+
 		hr = this->device->CreateSamplerState(&desc, this->samplerState.GetAddressOf());
 		if (FAILED(hr))
 		{
@@ -222,17 +237,17 @@ bool Graphics::InitializeShaders()
 	if (IsDebuggerPresent() == TRUE)
 	{
 #ifdef _DEBUG //Debug Mode
-	#ifdef _WIN64 //x64
+#ifdef _WIN64 //x64
 		shaderFolderPath = L"../x64/Debug/";
-	#else //x86
+#else //x86
 		shaderFolderPath = L"../Debug/";
-	#endif
+#endif
 #else //Relesase Mode
-	#ifdef  _WIN32//x64
+#ifdef  _WIN32//x64
 		shaderFolderPath = L"../x64/Release/";
-	#else//x86
+#else//x86
 		shaderFolderPath = L"../Release/";
-	#endif
+#endif
 #endif // DEBUG
 	}
 #pragma endregion 셰이더 경로 결정부분
@@ -244,13 +259,13 @@ bool Graphics::InitializeShaders()
 	};
 
 	UINT numElements = ARRAYSIZE(layout);
-	
+
 	if (!vertexShader.Initialize(this->device, shaderFolderPath + L"VertexShader.cso", layout, numElements))
 		return false;
 
 	if (!pixelShader.Initialize(this->device, shaderFolderPath + L"PixelShader.cso"))
 		return false;
-	
+
 	return true;
 }
 
@@ -259,35 +274,40 @@ bool Graphics::InitializeScene()
 	//Red Tri
 	Vertex v[] =
 	{
-		Vertex(-0.5f, -0.5f, 1.0f, 0.0f, 1.0f),//왼쪽 아래
-		Vertex(-0.5f,  0.5f, 1.0f, 0.0f, 0.0f), //왼쪽 위 
-		Vertex( 0.5f,  0.5f, 1.0f, 1.0f, 0.0f), //오른쪽 위
-
-		Vertex( 0.5f,  0.5f, 1.0f, 1.0f, 0.0f), //오른쪽 위
-		Vertex( 0.5f, -0.5f, 1.0f, 1.0f, 1.0f),//오른쪽 아래
-		Vertex(-0.5f, -0.5f, 1.0f, 0.0f, 1.0f), //왼쪽 아래 
+		Vertex(-0.5f, -0.5f, 0.0f, 0.0f, 1.0f),//왼쪽 아래
+		Vertex(-0.5f,  0.5f, 0.0f, 0.0f, 0.0f), //왼쪽 위 
+		Vertex(0.5f,  0.5f, 0.0f, 1.0f, 0.0f), //오른쪽 위
+		Vertex(0.5f, -0.5f, 0.0f, 1.0f, 1.0f),//오른쪽 아래
 	};
 
-	D3D11_BUFFER_DESC vertexBufferDesc;
-	ZeroMemory(&vertexBufferDesc, sizeof(D3D11_BUFFER_DESC));
-
-	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = sizeof(Vertex) * ARRAYSIZE(v);
-	vertexBufferDesc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_VERTEX_BUFFER;
-	vertexBufferDesc.CPUAccessFlags = 0;
-	vertexBufferDesc.MiscFlags = 0;
-
-	D3D11_SUBRESOURCE_DATA vertexBufferData;
-	ZeroMemory(&vertexBufferData, sizeof(D3D11_SUBRESOURCE_DATA));
-	vertexBufferData.pSysMem = v;
-
-	HRESULT hr;
-
+	DWORD indices[] =
 	{
-		hr = this->device->CreateBuffer(&vertexBufferDesc, &vertexBufferData, this->vertexBuffer.GetAddressOf());
-		assert(SUCCEEDED(hr));
+		0, 1, 2,
+		2, 3, 0
+	};
+
+	//Create vertex buffer & load vertex data.
+	HRESULT hr;
+	{
+		hr = this->vertexBuffer.Initialize(this->device.Get(), v, ARRAYSIZE(v));
+		if (FAILED(hr))
+		{
+			ErrorLogger::Log(hr, "Failed to create vertex buffer.");
+			return false;
+		}
 	}
 
+	//Create index buffer & load index data
+	{
+		hr = this->indexBuffer.Initialize(this->device.Get(), indices, ARRAYSIZE(indices));
+		if (FAILED(hr))
+		{
+			ErrorLogger::Log(hr, "Failed to create index buffer.");
+			return false;
+		}
+	}
+
+	//Load texture
 	{
 		hr = DirectX::CreateWICTextureFromFile(this->device.Get(), L"Data/Textures/texture000.jpeg", nullptr, myTexture.GetAddressOf());
 		if (FAILED(hr))
@@ -296,6 +316,19 @@ bool Graphics::InitializeScene()
 			return false;
 		}
 	}
+
+	//Initialize constant buffers
+	{
+		hr = this->constantBuffer.Initialize(this->device.Get(), this->deviceContext.Get());
+		if (FAILED(hr))
+		{
+			ErrorLogger::Log(hr, "Failed to initialize constant buffer.");
+			return false;
+		}
+	}
+
+	camera.SetPosition(0.0f, 0.0f, -2.0f);
+	camera.setprojectionValues(90.0f, static_cast<float>(windowWidth) / static_cast<float>(windowHeight), 0.1f, 1000.0f);
 
 	return true;
 }

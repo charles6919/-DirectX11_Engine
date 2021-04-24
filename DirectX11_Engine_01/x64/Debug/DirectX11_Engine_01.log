@@ -1,7 +1,19 @@
-﻿  Engine.cpp
-  Main.cpp
-  RenderWindow.cpp
-  Graphics.cpp
-  WindowContainer.cpp
-  코드를 생성하고 있습니다...
+﻿  Graphics.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\memory(3579,1): warning C4267: '초기화 중': 'size_t'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+          with
+          [
+              _Ty=UINT
+          ]
+D:\DirectX_11_Engine\-DirectX11_Engine\DirectX11_Engine_01\Systems\Graphics\VertexBuffer.h(44): message : 컴파일되는 함수 템플릿 인스턴스화 'std::unique_ptr<UINT,std::default_delete<UINT>> std::make_unique<UINT,size_t,0>(size_t &&)'에 대한 참조를 확인하세요.
+D:\DirectX_11_Engine\-DirectX11_Engine\DirectX11_Engine_01\Systems\Graphics\VertexBuffer.h(42): message : 클래스 템플릿 멤버 함수 'HRESULT VertexBuffer<Vertex>::Initialize(ID3D11Device *,T *,UINT)'을(를) 컴파일하는 중입니다.
+          with
+          [
+              T=Vertex
+          ]
+D:\DirectX_11_Engine\-DirectX11_Engine\DirectX11_Engine_01\Systems\Graphics\Graphics.cpp(292): message : 컴파일되는 함수 템플릿 인스턴스화 'HRESULT VertexBuffer<Vertex>::Initialize(ID3D11Device *,T *,UINT)'에 대한 참조를 확인하세요.
+          with
+          [
+              T=Vertex
+          ]
+D:\DirectX_11_Engine\-DirectX11_Engine\DirectX11_Engine_01\Systems\Graphics\Graphics.h(32): message : 컴파일되는 클래스 템플릿 인스턴스화 'VertexBuffer<Vertex>'에 대한 참조를 확인하세요.
   DirectX11_Engine_01.vcxproj -> D:\DirectX_11_Engine\-DirectX11_Engine\x64\Debug\DirectX11_Engine_01.exe

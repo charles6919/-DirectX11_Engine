@@ -72,6 +72,9 @@
     <ClCompile Include="Systems\Graphics\Shaders.cpp">
       <Filter>System\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Systems\Graphics\Camera.cpp">
+      <Filter>System\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StringConverter.h">
@@ -114,6 +117,21 @@
       <Filter>System\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Systems\Graphics\Shaders.h">
+      <Filter>System\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Graphics\VertexBuffer.h">
+      <Filter>System\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Graphics\IndexBuffer.h">
+      <Filter>System\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Graphics\ConstantBufferTypes.h">
+      <Filter>System\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Graphics\ConstantBuffer.h">
+      <Filter>System\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Graphics\Camera.h">
       <Filter>System\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
