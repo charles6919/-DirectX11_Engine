@@ -25,6 +25,12 @@
     <Filter Include="System\Graphics">
       <UniqueIdentifier>{d2dac79e-81cb-4468-b5bc-f06127f32822}</UniqueIdentifier>
     </Filter>
+    <Filter Include="System\Time">
+      <UniqueIdentifier>{760402b3-8928-44f1-ac80-9bef39af8134}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Graphics\ImGui">
+      <UniqueIdentifier>{8a79733f-c602-41ff-b469-6a21979d147e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -74,6 +80,27 @@
     </ClCompile>
     <ClCompile Include="Systems\Graphics\Camera.cpp">
       <Filter>System\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Time\Timer.cpp">
+      <Filter>System\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Graphics\ImGui\imgui.cpp">
+      <Filter>System\Graphics\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Graphics\ImGui\imgui_draw.cpp">
+      <Filter>System\Graphics\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Graphics\ImGui\imgui_impl_dx11.cpp">
+      <Filter>System\Graphics\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Graphics\ImGui\imgui_impl_win32.cpp">
+      <Filter>System\Graphics\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Graphics\ImGui\imgui_tables.cpp">
+      <Filter>System\Graphics\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Graphics\ImGui\imgui_widgets.cpp">
+      <Filter>System\Graphics\ImGui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -133,6 +160,33 @@
     </ClInclude>
     <ClInclude Include="Systems\Graphics\Camera.h">
       <Filter>System\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Time\Timer.h">
+      <Filter>System\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Graphics\ImGui\imconfig.h">
+      <Filter>System\Graphics\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Graphics\ImGui\imgui.h">
+      <Filter>System\Graphics\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Graphics\ImGui\imgui_impl_dx11.h">
+      <Filter>System\Graphics\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Graphics\ImGui\imgui_impl_win32.h">
+      <Filter>System\Graphics\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Graphics\ImGui\imgui_internal.h">
+      <Filter>System\Graphics\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Graphics\ImGui\imstb_rectpack.h">
+      <Filter>System\Graphics\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Graphics\ImGui\imstb_textedit.h">
+      <Filter>System\Graphics\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Graphics\ImGui\imstb_truetype.h">
+      <Filter>System\Graphics\ImGui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

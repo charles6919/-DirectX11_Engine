@@ -9,6 +9,8 @@
 #include "IndexBuffer.h"
 #include "ConstantBuffer.h"
 #include "Camera.h"
+#include "../Time/Timer.h"
+
 
 class Graphics
 {
@@ -19,6 +21,11 @@ private:
 	bool InitializeDirectX(HWND hwnd);
 	bool InitializeShaders();
 	bool InitializeScene();
+
+public:
+	Camera camera;
+
+private:
 
 	Microsoft::WRL::ComPtr<ID3D11Device>			device;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext>		deviceContext;
@@ -47,7 +54,6 @@ private:
 	int windowWidth = 0;
 	int windowHeight = 0;
 
-	Camera camera;
-
+	Timer fpsTimer;
 };
 

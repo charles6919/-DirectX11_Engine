@@ -157,12 +157,19 @@
     <ClCompile Include="Systems\Graphics\AdapterReader.cpp" />
     <ClCompile Include="Systems\Graphics\Camera.cpp" />
     <ClCompile Include="Systems\Graphics\Graphics.cpp" />
+    <ClCompile Include="Systems\Graphics\ImGui\imgui.cpp" />
+    <ClCompile Include="Systems\Graphics\ImGui\imgui_draw.cpp" />
+    <ClCompile Include="Systems\Graphics\ImGui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="Systems\Graphics\ImGui\imgui_impl_win32.cpp" />
+    <ClCompile Include="Systems\Graphics\ImGui\imgui_tables.cpp" />
+    <ClCompile Include="Systems\Graphics\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Systems\Graphics\Shaders.cpp" />
     <ClCompile Include="Systems\Graphics\Vertex.cpp" />
     <ClCompile Include="Systems\Keyboard\Keyboard.cpp" />
     <ClCompile Include="Systems\Keyboard\KeyboardEvent.cpp" />
     <ClCompile Include="Systems\Mouse\Mouse.cpp" />
     <ClCompile Include="Systems\Mouse\MouseEvent.cpp" />
+    <ClCompile Include="Systems\Time\Timer.cpp" />
     <ClCompile Include="WindowContainer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +182,14 @@
     <ClInclude Include="StringConverter.h" />
     <ClInclude Include="Systems\Graphics\AdapterReader.h" />
     <ClInclude Include="Systems\Graphics\Graphics.h" />
+    <ClInclude Include="Systems\Graphics\ImGui\imconfig.h" />
+    <ClInclude Include="Systems\Graphics\ImGui\imgui.h" />
+    <ClInclude Include="Systems\Graphics\ImGui\imgui_impl_dx11.h" />
+    <ClInclude Include="Systems\Graphics\ImGui\imgui_impl_win32.h" />
+    <ClInclude Include="Systems\Graphics\ImGui\imgui_internal.h" />
+    <ClInclude Include="Systems\Graphics\ImGui\imstb_rectpack.h" />
+    <ClInclude Include="Systems\Graphics\ImGui\imstb_textedit.h" />
+    <ClInclude Include="Systems\Graphics\ImGui\imstb_truetype.h" />
     <ClInclude Include="Systems\Graphics\IndexBuffer.h" />
     <ClInclude Include="Systems\Graphics\Shaders.h" />
     <ClInclude Include="Systems\Graphics\Vertex.h" />
@@ -183,6 +198,7 @@
     <ClInclude Include="Systems\Keyboard\KeyboardEvent.h" />
     <ClInclude Include="Systems\Mouse\Mouse.h" />
     <ClInclude Include="Systems\Mouse\MouseEvent.h" />
+    <ClInclude Include="Systems\Time\Timer.h" />
     <ClInclude Include="WindowContainer.h" />
     <ClInclude Include="Systems\Graphics\ConstantBufferTypes.h" />
   </ItemGroup>

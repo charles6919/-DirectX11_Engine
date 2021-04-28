@@ -3,6 +3,8 @@
 
 bool Engine::Initialize(HINSTANCE hInstance, string window_title, string window_class, int width, int height)
 {
+	timer.Start();
+
 	if (!this->render_window.Initialize(this, hInstance, window_title, window_class, width, height)) 
 	{
 		return false;
@@ -23,61 +25,66 @@ bool Engine::ProcessMessages()
 
 void Engine::Update()
 {
+	float deltaTime = timer.GetMilisecondsElapsed();
+	timer.Restart();
+
 	while (!keyboard.CharBufferIsEmpty())
 	{
 		unsigned char ch = keyboard.ReadChar();
-		//string outMsg = "Char: ";
-		//outMsg += ch;
-		//outMsg += "\n";
-		//OutputDebugStringA(outMsg.c_str());
 	}
 
 	while (!keyboard.KeyBufferIsEmpty())
 	{
 		KeyboardEvent kbe = keyboard.ReadKey();
 		unsigned char keycode = kbe.GetKeyCode();
-		/*string outMsg = "";
-		if (kbe.IsPress())
-		{
-			outMsg += "Key press: ";
-		}
-		else if (kbe.IsRelease())
-		{
-			outMsg += "Key release: ";
-		}
-		outMsg += keycode;
-		outMsg += "\n";
-		OutputDebugStringA(outMsg.c_str());*/
 	}
 
+	const float rotSpeed = 0.005f;
 	while (!mouse.EventBufferIsEmpty())
 	{
-		MouseEvent me = mouse.ReadEvent();
-		/*string outMsg = "X: ";
-		outMsg += to_string(me.GetPosX());
-		outMsg += ", Y: ";
-		outMsg += to_string(me.GetPosY());
-		outMsg += "\n";
-		OutputDebugStringA(outMsg.c_str());*/
-
-		/*if (me.GetType() == MouseEvent::EventType::WheelDown)
+		MouseEvent me = mouse.ReadEvent();	
+		if (mouse.IsRightDown())
 		{
-			OutputDebugStringA("MouseWheelDown\n");
+			if (me.GetType() == MouseEvent::EventType::RAW_MOVE)
+			{
+				this->gfx.camera.AdjustRotation((float)me.GetPosY() * rotSpeed, (float)me.GetPosX() * rotSpeed, 0.0f);
+			}
 		}
-		else if (me.GetType() == MouseEvent::EventType::WheelUp)
-		{
-			OutputDebugStringA("MouseWheelUp\n");
-		}*/
+	}
+	
+	const float cameraSpeed = 0.006f;
 
-		if (me.GetType() == MouseEvent::EventType::RAW_MOVE)
-		{
-			string outMsg = "X: ";
-			outMsg += to_string(me.GetPosX());
-			outMsg += ", Y: ";
-			outMsg += to_string(me.GetPosY());
-			outMsg += "\n";
-			OutputDebugStringA(outMsg.c_str());
-		}
+	if (keyboard.KeyIsPressed('W'))
+	{
+		this->gfx.camera.AdjustPosition(this->gfx.camera.GetForwardVector() * cameraSpeed * deltaTime);
+	}
+	if (keyboard.KeyIsPressed('A'))
+	{
+		this->gfx.camera.AdjustPosition(this->gfx.camera.GetLeftVector() * cameraSpeed * deltaTime);
+	}
+	if (keyboard.KeyIsPressed('S'))
+	{
+		this->gfx.camera.AdjustPosition(this->gfx.camera.GetBackwardVector() * cameraSpeed * deltaTime);
+	}
+	if (keyboard.KeyIsPressed('D'))
+	{
+		this->gfx.camera.AdjustPosition(this->gfx.camera.GetRightVector() * cameraSpeed * deltaTime);
+	}
+	if (keyboard.KeyIsPressed('E'))
+	{
+		this->gfx.camera.AdjustPosition(this->gfx.camera.GetUpVector() * cameraSpeed * deltaTime);
+	}
+	if (keyboard.KeyIsPressed('Q'))
+	{
+		this->gfx.camera.AdjustPosition(this->gfx.camera.GetDownVector() * cameraSpeed * deltaTime);
+	}
+	if (keyboard.KeyIsPressed(VK_SPACE))
+	{
+		this->gfx.camera.AdjustPosition(0.0f, cameraSpeed * deltaTime, 0.0f);
+	}
+	if (keyboard.KeyIsPressed('Z'))
+	{
+		this->gfx.camera.AdjustRotation(0.0f, -cameraSpeed * deltaTime, 0.0f);
 	}
 }
 

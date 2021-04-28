@@ -5,6 +5,7 @@ bool Graphics::Initialize(HWND hwnd, int width, int height)
 {
 	this->windowWidth = width;
 	this->windowHeight = height;
+	this->fpsTimer.Start();
 
 	if (!InitializeDirectX(hwnd))
 		return false;
@@ -14,6 +15,14 @@ bool Graphics::Initialize(HWND hwnd, int width, int height)
 
 	if (!InitializeScene())
 		return false;
+
+	//Setup ImGUI
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	ImGui_ImplWin32_Init(hwnd);
+	ImGui_ImplDX11_Init(this->device.Get(), this->deviceContext.Get());
+	ImGui::StyleColorsDark();
 
 	return true;
 }
@@ -37,9 +46,8 @@ void Graphics::RenderFrame()
 	UINT offset = 0;
 
 	//Update Constant Buffer
-	DirectX::XMMATRIX world = DirectX::XMMatrixIdentity();
-	camera.AdjustPosition(0.0f, 0.01f, 0.0f);
-
+	static float translationOffset[3] = { 0, 0, 0 };
+	DirectX::XMMATRIX world = XMMatrixTranslation(translationOffset[0], translationOffset[1], translationOffset[2]);
 	constantBuffer.data.mat = world * camera.GetViewMatrix() * camera.GetProjectionMatrix();
 	constantBuffer.data.mat = DirectX::XMMatrixTranspose(constantBuffer.data.mat); //hlsl의 행렬의 행열이 반대기때문에 재배열 해줘야 한다.
 
@@ -54,11 +62,40 @@ void Graphics::RenderFrame()
 	this->deviceContext->DrawIndexed(indexBuffer.BufferSize(), 0, 0);
 
 	//Drw Text
+	static int fpsCounter = 0;
+	static string fpsString = "FPS : 0";
+	fpsCounter++;
+	if (fpsTimer.GetMilisecondsElapsed() > 1000.0f)
+	{
+		fpsString = "FPS : " + to_string(fpsCounter);
+		fpsCounter = 0;
+		fpsTimer.Restart();
+	}
 	spriteBatch->Begin();
-	spriteFont->DrawString(spriteBatch.get(), L"Hello World", DirectX::XMFLOAT2(0, 0), DirectX::Colors::White, 0.0f, DirectX::XMFLOAT2(0.0f, 0.0f), DirectX::XMFLOAT2(1.0f, 1.0f));
+	spriteFont->DrawString(spriteBatch.get(), StringConverter::StringToWide(fpsString).c_str(), DirectX::XMFLOAT2(0, 0), DirectX::Colors::White, 0.0f, DirectX::XMFLOAT2(0.0f, 0.0f), DirectX::XMFLOAT2(1.0f, 1.0f));
 	spriteBatch->End();
 
-	this->swapchain->Present(1, NULL);
+	static int counter = 0;
+	//Start the Dear ImGUI frame
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+	//Create ImGUI Test Window
+	ImGui::Begin("Test");
+	ImGui::Text("This is example text.");
+	if (ImGui::Button("CLICK ME!"))
+		counter++;
+	ImGui::SameLine();
+	string clickCount = "Click Count: " + to_string(counter);
+	ImGui::Text(clickCount.c_str());
+	ImGui::DragFloat3("Translation x/y/z", translationOffset, 0.1f, -5.0f, 5.0f);
+	ImGui::End();
+	//Assemble Together Draw data
+	ImGui::Render();
+	//Render Draw Data
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+	this->swapchain->Present(0, NULL);
 }
 
 bool Graphics::InitializeDirectX(HWND hwnd)

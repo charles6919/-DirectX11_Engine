@@ -20,6 +20,10 @@
 #pragma comment(lib, "DXGI.lib")
 #pragma comment(lib, "D3DCompiler.lib")
 
+//ImGUI
+#include "Systems/Graphics/ImGui/imgui.h"
+#include "Systems/Graphics/ImGui/imgui_impl_win32.h"
+#include "Systems/Graphics/ImGui/imgui_impl_dx11.h"
 //Namespaces
 using namespace std;
 
