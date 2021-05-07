@@ -21,6 +21,8 @@ int APIENTRY wWinMain( _In_ HINSTANCE hInstance,
 			engine.Update();
 			engine.Render();
 		}
+
+		int a = 10;
 	}
 	return 0;
 }

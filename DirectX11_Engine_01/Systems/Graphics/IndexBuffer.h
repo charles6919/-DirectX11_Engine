@@ -33,6 +33,9 @@ public:
 
 	HRESULT Initialize(ID3D11Device* device, DWORD* data, UINT numVertices)
 	{
+		if (buffer.Get() != nullptr)
+			buffer.Reset();
+
 		this->bufferSize = numVertices;
 
 		//Create vertex buffer & load vertex data.

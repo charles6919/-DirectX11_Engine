@@ -34,8 +34,9 @@ private:
 
 	VertexShader vertexShader;
 	PixelShader pixelShader;
+	ConstantBuffer<CB_VS_VertexShader> cb_vs_vertexShader;
+	ConstantBuffer<CB_PS_PixelShader> cb_ps_pixelShader;
 
-	ConstantBuffer<CB_VS_VertexShader> constantBuffer;
 	VertexBuffer<Vertex> vertexBuffer;
 	IndexBuffer indexBuffer;
 
@@ -44,6 +45,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthStencilState;
 
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState;
+	Microsoft::WRL::ComPtr<ID3D11BlendState> blendState;
 
 	unique_ptr<DirectX::SpriteBatch> spriteBatch;
 	unique_ptr<DirectX::SpriteFont> spriteFont;
