@@ -1,18 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
-  <ProjectOutputs>
-    <ProjectOutput>
-      <FullPath>D:\DirectX_11_Engine\-DirectX11_Engine\x64\Debug\DirectX11_Engine_01.exe</FullPath>
-    </ProjectOutput>
-  </ProjectOutputs>
-  <ContentFiles>
-    <ContentFile>
-      <FullPath>D:\DirectX_11_Engine\-DirectX11_Engine\x64\Debug\PixelShader.cso</FullPath>
-    </ContentFile>
-    <ContentFile>
-      <FullPath>D:\DirectX_11_Engine\-DirectX11_Engine\x64\Debug\VertexShader.cso</FullPath>
-    </ContentFile>
-  </ContentFiles>
-  <SatelliteDlls />
-  <NonRecipeFileRefs />
+  <ProjectOutputs>C:\Users\charl\OneDrive\문서\GitHub\-DirectX11_Engine\x64\Debug\DirectX11_Engine_01.exe</ProjectOutputs>
+  <ContentFiles>C:\Users\charl\OneDrive\문서\GitHub\-DirectX11_Engine\x64\Debug\PixelShader.cso;C:\Users\charl\OneDrive\문서\GitHub\-DirectX11_Engine\x64\Debug\VertexShader.cso</ContentFiles>
+  <SatelliteDlls></SatelliteDlls>
+  <NonRecipeFileRefs></NonRecipeFileRefs>
 </Project>

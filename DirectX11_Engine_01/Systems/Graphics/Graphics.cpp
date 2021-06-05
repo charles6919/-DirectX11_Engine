@@ -46,26 +46,76 @@ void Graphics::RenderFrame()
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 
-	//Update Constant Buffer
-	static float translationOffset[3] = { 0, 0, 0 };
-	DirectX::XMMATRIX world = XMMatrixTranslation(translationOffset[0], translationOffset[1], translationOffset[2]);
-	cb_vs_vertexShader.data.mat = world * camera.GetViewMatrix() * camera.GetProjectionMatrix();
-	cb_vs_vertexShader.data.mat = DirectX::XMMatrixTranspose(cb_vs_vertexShader.data.mat); //hlsl의 행렬의 행열이 반대기때문에 재배열 해줘야 한다.
-
-	if (!cb_vs_vertexShader.ApplyChanges())
-		return;
-	this->deviceContext->VSSetConstantBuffers(0, 1, cb_vs_vertexShader.GetAddressOf());
-
 	static float alpha = 0.1f;
-	this->cb_ps_pixelShader.data.alpha = alpha;
-	this->cb_ps_pixelShader.ApplyChanges();
-	this->deviceContext->PSSetConstantBuffers(0, 1, cb_ps_pixelShader.GetAddressOf());
 
-	//Draw Square
-	this->deviceContext->PSSetShaderResources(0, 1, this->myTexture.GetAddressOf());
-	this->deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), vertexBuffer.StridePtr(), &offset);
-	this->deviceContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT::DXGI_FORMAT_R32_UINT, 0);
-	this->deviceContext->DrawIndexed(indexBuffer.BufferSize(), 0, 0);
+	{//Pavement
+		//Update Constant Buffer
+		static float translationOffset[3] = { 0, 0, 4.0f };
+		DirectX::XMMATRIX world = XMMatrixScaling(5.0f, 5.0f, 5.0f) * XMMatrixTranslation(translationOffset[0], translationOffset[1], translationOffset[2]);
+		cb_vs_vertexShader.data.mat = world * camera.GetViewMatrix() * camera.GetProjectionMatrix();
+		cb_vs_vertexShader.data.mat = DirectX::XMMatrixTranspose(cb_vs_vertexShader.data.mat); //hlsl의 행렬의 행열이 반대기때문에 재배열 해줘야 한다.
+
+		if (!cb_vs_vertexShader.ApplyChanges())
+			return;
+		this->deviceContext->VSSetConstantBuffers(0, 1, cb_vs_vertexShader.GetAddressOf());
+
+
+		this->cb_ps_pixelShader.data.alpha = 1.0f;
+		this->cb_ps_pixelShader.ApplyChanges();
+		this->deviceContext->PSSetConstantBuffers(0, 1, cb_ps_pixelShader.GetAddressOf());
+
+		//Draw Square
+		this->deviceContext->PSSetShaderResources(0, 1, this->pavementTexture.GetAddressOf());
+		this->deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), vertexBuffer.StridePtr(), &offset);
+		this->deviceContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT::DXGI_FORMAT_R32_UINT, 0);
+		this->deviceContext->DrawIndexed(indexBuffer.BufferSize(), 0, 0);
+	}
+
+	{//Grass
+		//Update Constant Buffer
+		static float translationOffset[3] = { 0, 0, 0 };
+		DirectX::XMMATRIX world = XMMatrixScaling(5.0f, 5.0f, 5.0f) * XMMatrixTranslation(translationOffset[0], translationOffset[1], translationOffset[2]);
+		cb_vs_vertexShader.data.mat = world * camera.GetViewMatrix() * camera.GetProjectionMatrix();
+		cb_vs_vertexShader.data.mat = DirectX::XMMatrixTranspose(cb_vs_vertexShader.data.mat); //hlsl의 행렬의 행열이 반대기때문에 재배열 해줘야 한다.
+
+		if (!cb_vs_vertexShader.ApplyChanges())
+			return;
+		this->deviceContext->VSSetConstantBuffers(0, 1, cb_vs_vertexShader.GetAddressOf());
+
+
+		this->cb_ps_pixelShader.data.alpha = 1.0f;
+		this->cb_ps_pixelShader.ApplyChanges();
+		this->deviceContext->PSSetConstantBuffers(0, 1, cb_ps_pixelShader.GetAddressOf());
+
+		//Draw Square
+		this->deviceContext->PSSetShaderResources(0, 1, this->grassTexture.GetAddressOf());
+		this->deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), vertexBuffer.StridePtr(), &offset);
+		this->deviceContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT::DXGI_FORMAT_R32_UINT, 0);
+		this->deviceContext->DrawIndexed(indexBuffer.BufferSize(), 0, 0);
+	}
+
+	{//PinkSquare
+		//Update Constant Buffer
+		static float translationOffset[3] = { 0, 0, -1.0f };
+		DirectX::XMMATRIX world = XMMatrixTranslation(translationOffset[0], translationOffset[1], translationOffset[2]);
+		cb_vs_vertexShader.data.mat = world * camera.GetViewMatrix() * camera.GetProjectionMatrix();
+		cb_vs_vertexShader.data.mat = DirectX::XMMatrixTranspose(cb_vs_vertexShader.data.mat); //hlsl의 행렬의 행열이 반대기때문에 재배열 해줘야 한다.
+
+		if (!cb_vs_vertexShader.ApplyChanges())
+			return;
+		this->deviceContext->VSSetConstantBuffers(0, 1, cb_vs_vertexShader.GetAddressOf());
+
+
+		this->cb_ps_pixelShader.data.alpha = alpha;
+		this->cb_ps_pixelShader.ApplyChanges();
+		this->deviceContext->PSSetConstantBuffers(0, 1, cb_ps_pixelShader.GetAddressOf());
+
+		//Draw Square
+		this->deviceContext->PSSetShaderResources(0, 1, this->pinkTexture.GetAddressOf());
+		this->deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), vertexBuffer.StridePtr(), &offset);
+		this->deviceContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT::DXGI_FORMAT_R32_UINT, 0);
+		this->deviceContext->DrawIndexed(indexBuffer.BufferSize(), 0, 0);
+	}
 
 	//Drw Text
 	static int fpsCounter = 0;
@@ -373,7 +423,25 @@ bool Graphics::InitializeScene()
 
 	//Load texture
 	{
-		hr = DirectX::CreateWICTextureFromFile(this->device.Get(), L"Data/Textures/texture000.jpeg", nullptr, myTexture.GetAddressOf());
+		hr = DirectX::CreateWICTextureFromFile(this->device.Get(), L"Data/Textures/pinksquare.jpg", nullptr, pinkTexture.GetAddressOf());
+		if (FAILED(hr))
+		{
+			ErrorLogger::Log(hr, "Failed to create wic texture from file.");
+			return false;
+		}
+	}
+
+	{
+		hr = DirectX::CreateWICTextureFromFile(this->device.Get(), L"Data/Textures/seamless_grass.jpg", nullptr, grassTexture.GetAddressOf());
+		if (FAILED(hr))
+		{
+			ErrorLogger::Log(hr, "Failed to create wic texture from file.");
+			return false;
+		}
+	}
+
+	{
+		hr = DirectX::CreateWICTextureFromFile(this->device.Get(), L"Data/Textures/seamless_pavement.jpg", nullptr, pavementTexture.GetAddressOf());
 		if (FAILED(hr))
 		{
 			ErrorLogger::Log(hr, "Failed to create wic texture from file.");
@@ -400,6 +468,7 @@ bool Graphics::InitializeScene()
 			return false;
 		}
 	}
+
 
 	camera.SetPosition(0.0f, 0.0f, -2.0f);
 	camera.setprojectionValues(90.0f, static_cast<float>(windowWidth) / static_cast<float>(windowHeight), 0.1f, 1000.0f);
