@@ -10,7 +10,7 @@ C:\Users\charl\OneDrive\문서\GitHub\-DirectX11_Engine\DirectX11_Engine_01\Syst
           [
               T=Vertex
           ]
-C:\Users\charl\OneDrive\문서\GitHub\-DirectX11_Engine\DirectX11_Engine_01\Systems\Graphics\Graphics.cpp(406): message : 컴파일되는 함수 템플릿 인스턴스화 'HRESULT VertexBuffer<Vertex>::Initialize(ID3D11Device *,T *,UINT)'에 대한 참조를 확인하세요.
+C:\Users\charl\OneDrive\문서\GitHub\-DirectX11_Engine\DirectX11_Engine_01\Systems\Graphics\Graphics.cpp(430): message : 컴파일되는 함수 템플릿 인스턴스화 'HRESULT VertexBuffer<Vertex>::Initialize(ID3D11Device *,T *,UINT)'에 대한 참조를 확인하세요.
           with
           [
               T=Vertex

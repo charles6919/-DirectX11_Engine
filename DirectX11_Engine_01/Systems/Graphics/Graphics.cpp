@@ -48,52 +48,6 @@ void Graphics::RenderFrame()
 
 	static float alpha = 0.1f;
 
-	{//Pavement
-		//Update Constant Buffer
-		static float translationOffset[3] = { 0, 0, 4.0f };
-		DirectX::XMMATRIX world = XMMatrixScaling(5.0f, 5.0f, 5.0f) * XMMatrixTranslation(translationOffset[0], translationOffset[1], translationOffset[2]);
-		cb_vs_vertexShader.data.mat = world * camera.GetViewMatrix() * camera.GetProjectionMatrix();
-		cb_vs_vertexShader.data.mat = DirectX::XMMatrixTranspose(cb_vs_vertexShader.data.mat); //hlsl의 행렬의 행열이 반대기때문에 재배열 해줘야 한다.
-
-		if (!cb_vs_vertexShader.ApplyChanges())
-			return;
-		this->deviceContext->VSSetConstantBuffers(0, 1, cb_vs_vertexShader.GetAddressOf());
-
-
-		this->cb_ps_pixelShader.data.alpha = 1.0f;
-		this->cb_ps_pixelShader.ApplyChanges();
-		this->deviceContext->PSSetConstantBuffers(0, 1, cb_ps_pixelShader.GetAddressOf());
-
-		//Draw Square
-		this->deviceContext->PSSetShaderResources(0, 1, this->pavementTexture.GetAddressOf());
-		this->deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), vertexBuffer.StridePtr(), &offset);
-		this->deviceContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT::DXGI_FORMAT_R32_UINT, 0);
-		this->deviceContext->DrawIndexed(indexBuffer.BufferSize(), 0, 0);
-	}
-
-	{//Grass
-		//Update Constant Buffer
-		static float translationOffset[3] = { 0, 0, 0 };
-		DirectX::XMMATRIX world = XMMatrixScaling(5.0f, 5.0f, 5.0f) * XMMatrixTranslation(translationOffset[0], translationOffset[1], translationOffset[2]);
-		cb_vs_vertexShader.data.mat = world * camera.GetViewMatrix() * camera.GetProjectionMatrix();
-		cb_vs_vertexShader.data.mat = DirectX::XMMatrixTranspose(cb_vs_vertexShader.data.mat); //hlsl의 행렬의 행열이 반대기때문에 재배열 해줘야 한다.
-
-		if (!cb_vs_vertexShader.ApplyChanges())
-			return;
-		this->deviceContext->VSSetConstantBuffers(0, 1, cb_vs_vertexShader.GetAddressOf());
-
-
-		this->cb_ps_pixelShader.data.alpha = 1.0f;
-		this->cb_ps_pixelShader.ApplyChanges();
-		this->deviceContext->PSSetConstantBuffers(0, 1, cb_ps_pixelShader.GetAddressOf());
-
-		//Draw Square
-		this->deviceContext->PSSetShaderResources(0, 1, this->grassTexture.GetAddressOf());
-		this->deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), vertexBuffer.StridePtr(), &offset);
-		this->deviceContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT::DXGI_FORMAT_R32_UINT, 0);
-		this->deviceContext->DrawIndexed(indexBuffer.BufferSize(), 0, 0);
-	}
-
 	{//PinkSquare
 		//Update Constant Buffer
 		static float translationOffset[3] = { 0, 0, -1.0f };
@@ -111,10 +65,14 @@ void Graphics::RenderFrame()
 		this->deviceContext->PSSetConstantBuffers(0, 1, cb_ps_pixelShader.GetAddressOf());
 
 		//Draw Square
-		this->deviceContext->PSSetShaderResources(0, 1, this->pinkTexture.GetAddressOf());
+		this->deviceContext->PSSetShaderResources(0, 1, this->pavementTexture.GetAddressOf());
 		this->deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), vertexBuffer.StridePtr(), &offset);
 		this->deviceContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT::DXGI_FORMAT_R32_UINT, 0);
+		this->deviceContext->RSSetState(this->rasterizerState_CullFront.Get());
 		this->deviceContext->DrawIndexed(indexBuffer.BufferSize(), 0, 0);
+		this->deviceContext->RSSetState(this->rasterizerState.Get());
+		this->deviceContext->DrawIndexed(indexBuffer.BufferSize(), 0, 0);
+
 	}
 
 	//Drw Text
@@ -290,6 +248,23 @@ bool Graphics::InitializeDirectX(HWND hwnd)
 		}
 	}
 
+	//Create Rasterizer State for culling front.
+	{
+		D3D11_RASTERIZER_DESC desc;
+		ZeroMemory(&desc, sizeof(D3D11_RASTERIZER_DESC));
+
+		desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+		desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_FRONT;
+
+		hr = this->device->CreateRasterizerState(&desc, this->rasterizerState_CullFront.GetAddressOf());
+		if (FAILED(hr))
+		{
+			ErrorLogger::Log(hr, "Failed to create rasterizer state.");
+			return false;
+		}
+	}
+	
+
 	//Create Blend State
 	{
 		D3D11_BLEND_DESC blendDesc;
@@ -388,16 +363,38 @@ bool Graphics::InitializeScene()
 	//Red Tri
 	Vertex v[] =
 	{
-		Vertex(-0.5f, -0.5f, 0.0f, 0.0f, 1.0f),//왼쪽 아래
-		Vertex(-0.5f,  0.5f, 0.0f, 0.0f, 0.0f), //왼쪽 위 
-		Vertex(0.5f,  0.5f, 0.0f, 1.0f, 0.0f), //오른쪽 위
-		Vertex(0.5f, -0.5f, 0.0f, 1.0f, 1.0f),//오른쪽 아래
+		Vertex(-0.5f, -0.5f, -0.5f, 0.0f, 1.0f),	//FRONT 왼쪽 아래
+		Vertex(-0.5f,  0.5f, -0.5f, 0.0f, 0.0f),	//FRONT 왼쪽 위 
+		Vertex(0.5f,  0.5f, -0.5f, 1.0f, 0.0f),		//FRONT 오른쪽 위
+		Vertex(0.5f, -0.5f, -0.5f, 1.0f, 1.0f),		//FRONT 오른쪽 아래
+
+		Vertex(-0.5f, -0.5f, 0.5f, 0.0f, 1.0f),		//BACK 왼쪽 아래
+		Vertex(-0.5f,  0.5f, 0.5f, 0.0f, 0.0f),		//BACK 왼쪽 위 
+		Vertex(0.5f,  0.5f, 0.5f, 1.0f, 0.0f),		//BACK 오른쪽 위
+		Vertex(0.5f, -0.5f, 0.5f, 1.0f, 1.0f),		//BACK 오른쪽 아래
 	};
 
 	DWORD indices[] =
 	{
-		0, 1, 2,
-		2, 3, 0
+		0, 1, 2,	//FRONT
+		2, 3, 0,	//FRONT
+
+		4, 7, 6,	//BACK
+		4, 6, 5,	//BACK
+
+		3, 2, 6,	//RIGHT
+		3, 6, 7,	//RIGHT
+
+		4, 5, 1,	//LEFT
+		4, 1, 0,	//LEFT
+
+		1, 5, 6,	//TOP
+		1, 6, 2,	//TOP
+
+		0, 3, 7,	//BOTTOM
+		0, 7, 4,	//BOTTOM
+
+
 	};
 
 	//Create vertex buffer & load vertex data.
