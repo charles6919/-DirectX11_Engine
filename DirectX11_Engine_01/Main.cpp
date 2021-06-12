@@ -24,5 +24,6 @@ int APIENTRY wWinMain( _In_ HINSTANCE hInstance,
 
 		int a = 10;
 	}
+
 	return 0;
 }

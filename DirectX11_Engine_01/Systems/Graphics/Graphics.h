@@ -32,29 +32,29 @@ private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>			swapchain;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView>	renderTargetView;
 
-	VertexShader vertexShader;
-	PixelShader pixelShader;
-	ConstantBuffer<CB_VS_VertexShader> cb_vs_vertexShader;
-	ConstantBuffer<CB_PS_PixelShader> cb_ps_pixelShader;
+	VertexShader						vertexShader;
+	PixelShader							pixelShader;
+	ConstantBuffer<CB_VS_VertexShader>	cb_vs_vertexShader;
+	ConstantBuffer<CB_PS_PixelShader>	cb_ps_pixelShader;
 
-	VertexBuffer<Vertex> vertexBuffer;
-	IndexBuffer indexBuffer;
+	VertexBuffer<Vertex>	vertexBuffer;
+	IndexBuffer				indexBuffer;
 
-	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depthStencilView;
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencilBuffer;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilView>	depthStencilView;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D>			depthStencilBuffer;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthStencilState;
 
-	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState;
-	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState_CullFront;
-	Microsoft::WRL::ComPtr<ID3D11BlendState> blendState;
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState>	rasterizerState;
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState>	rasterizerState_CullFront;
+	Microsoft::WRL::ComPtr<ID3D11BlendState>		blendState;
 	
-	unique_ptr<DirectX::SpriteBatch> spriteBatch;
-	unique_ptr<DirectX::SpriteFont> spriteFont;
+	unique_ptr<DirectX::SpriteBatch>	spriteBatch;
+	unique_ptr<DirectX::SpriteFont>		spriteFont;
 
-	Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pinkTexture;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> grassTexture;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pavementTexture;
+	Microsoft::WRL::ComPtr<ID3D11SamplerState>			samplerState;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>	pinkTexture;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>	grassTexture;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>	pavementTexture;
 
 	int windowWidth = 0;
 	int windowHeight = 0;
