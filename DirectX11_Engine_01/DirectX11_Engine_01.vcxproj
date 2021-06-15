@@ -163,6 +163,7 @@
     <ClCompile Include="Systems\Graphics\ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="Systems\Graphics\ImGui\imgui_tables.cpp" />
     <ClCompile Include="Systems\Graphics\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="Systems\Graphics\Model.cpp" />
     <ClCompile Include="Systems\Graphics\Shaders.cpp" />
     <ClCompile Include="Systems\Graphics\Vertex.cpp" />
     <ClCompile Include="Systems\Keyboard\Keyboard.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="Systems\Graphics\ImGui\imstb_textedit.h" />
     <ClInclude Include="Systems\Graphics\ImGui\imstb_truetype.h" />
     <ClInclude Include="Systems\Graphics\IndexBuffer.h" />
+    <ClInclude Include="Systems\Graphics\Model.h" />
     <ClInclude Include="Systems\Graphics\Shaders.h" />
     <ClInclude Include="Systems\Graphics\Vertex.h" />
     <ClInclude Include="Systems\Graphics\VertexBuffer.h" />

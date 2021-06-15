@@ -5,11 +5,9 @@
 #include <SpriteBatch.h>
 #include <SpriteFont.h>
 #include <WICTextureLoader.h>
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "ConstantBuffer.h"
 #include "Camera.h"
 #include "../Time/Timer.h"
+#include "Model.h"
 
 
 class Graphics
@@ -24,7 +22,7 @@ private:
 
 public:
 	Camera camera;
-
+	Model model;
 private:
 
 	Microsoft::WRL::ComPtr<ID3D11Device>			device;
@@ -37,8 +35,7 @@ private:
 	ConstantBuffer<CB_VS_VertexShader>	cb_vs_vertexShader;
 	ConstantBuffer<CB_PS_PixelShader>	cb_ps_pixelShader;
 
-	VertexBuffer<Vertex>	vertexBuffer;
-	IndexBuffer				indexBuffer;
+	//Model model;
 
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView>	depthStencilView;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D>			depthStencilBuffer;
